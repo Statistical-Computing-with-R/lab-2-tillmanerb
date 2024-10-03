@@ -1,10 +1,17 @@
 ---
 title: "Lab 2: Exploring Rodents with `ggplot2`"
-author: "Your name here!"
+author: "Tillman Erb"
 format: html
 editor: source
 embed-resources: true
 code-tools: true
+code-fold: true
+theme: darkly
+execute:
+  echo: true
+  error: true
+  warning: false
+
 ---
 
 # Part 1: GitHub Workflow
