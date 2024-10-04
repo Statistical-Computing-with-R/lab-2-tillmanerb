@@ -70,6 +70,8 @@ In the code chunk below, load in the packages necessary for your analysis. You s
 ```{r}
 #| label: setup
 
+library(tidyverse)
+
 ```
 
 # Data Context
@@ -109,15 +111,25 @@ represent:
 ```{r}
 #| label: load-data
 
+surveys <- read_csv('data/surveys.csv')
 ```
 
 **2. What are the dimensions (# of rows and columns) of these data?**
 
-<!-- You can either write code here or in the code chunk for #1, but I **must** see the code you used to address this question!  -->
+```{r}
+cat('Number of rows: ', nrow(surveys))
+#https://www.r-bloggers.com/2020/06/determine-the-size-of-a-data-frame/,
+#https://stackoverflow.com/questions/15589601/print-string-and-variable-contents-on-the-same-line-in-r
+cat('\nNumber of columns: ', nrow(surveys))
+
+```
+
 
 **3. What are the data types of the variables in this dataset?**
 
-<!-- You can either write code here or in the code chunk for #1, but I **must** see the code you used to address this question!  -->
+```{r}
+spec(surveys)
+```
 
 # Exploratory Data Analysis with **`ggplot2`**
 
@@ -146,6 +158,16 @@ the $x$-axis) and `hindfoot_length` (on the $y$-axis).**
 ```{r}
 #| label: scatterplot
 
+ggplot(data = surveys,
+       mapping = aes(x = weight,
+                     y = hindfoot_length
+                     )) +
+geom_point('alpha' = 0.5) +
+facet_wrap(~species) + 
+labs(x = "Species weight (grams)",
+     y = "",
+     title = "Species weight versus hindfoot length for species in Portal, AZ",
+     subtitle = "Hindfoot length (mm)")
 ```
 
 We can see there are **a lot** of points plotted on top of each other. Let's try and modify this plot to extract more information from it.
@@ -176,7 +198,18 @@ It takes a larger cognitive load to read text that is rotated. It is common prac
 ```{r}
 #| label: boxplot
 
-
+ggplot(data = surveys,
+       mapping = aes(x = species,
+                     y = weight)) +
+geom_boxplot(outliers = FALSE) +
+geom_jitter(color = 'steelblue', 
+            'alpha' = 0.3
+            ) +
+labs(x = "Species",
+     y = "Weight (g)"
+) +
+#https://stackoverflow.com/questions/1330989/rotating-and-spacing-axis-labels-in-ggplot2
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 **10. Create side-by-side boxplots to visualize the distribution of weight within each species.**
@@ -223,6 +256,18 @@ Some people (and journals) prefer for boxplots to be stacked with a specific ori
 ```{r}
 #| label: rotated-boxplot
 
+ggplot(data = surveys,
+       mapping = aes(y = species,
+                     x = weight)) +
+geom_boxplot(outliers = FALSE) +
+geom_jitter(color = 'steelblue', 
+            'alpha' = 0.3
+            ) +
+labs(x = "Species",
+     y = "Weight (g)"
+) +
+#https://stackoverflow.com/questions/1330989/rotating-and-spacing-axis-labels-in-ggplot2
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 Notice how vertically stacked boxplots make the species labels more readable
@@ -255,13 +300,15 @@ might want to look up the help documentation for `aov()`.
 ```{r}
 #| label: anova
 
-species_mod <- aov()
+species_mod <- aov(data = surveys,
+                   weight ~ species)
 
 summary(species_mod)
 ```
 
 **18. Based on the results of the ANOVA F-test, draw a conclusion in context of the hypotheses. Make sure to cite appropriate output from above.**
 
+Based off a p value of approximately zero from the above one-way anova test, we reject the null hypothesis and conclude that at least one rodent species has a different mean weight.
 
 # Lab 2 Submission
 
