@@ -36,9 +36,11 @@ Next, create a setup code chunk to load the packages and read in the
 
 library(tidyverse)
 library(ggridges)
+library(here)
 
-surveys <- read_csv('data/surveys.csv')
+surveys <- read_csv(here::here('data','surveys.csv'))
 ```
+
 
 ```{r}
 #| label: boxplot
@@ -46,10 +48,10 @@ surveys <- read_csv('data/surveys.csv')
 ggplot(data = surveys,
        mapping = aes(x = species,
                      y = weight)) +
-geom_boxplot(outliers = FALSE) +
 geom_jitter(color = 'steelblue', 
             'alpha' = 0.3
             ) +
+geom_boxplot(outliers = FALSE) +
 labs(x = "Species",
      y = "Weight (g)"
 ) +
@@ -76,9 +78,11 @@ make use of the `ggridges` package to create side-by-side density (ridge) plots.
 ggplot(data = surveys, 
        mapping = aes(y = species,
                      x = weight)) +
-geom_density_ridges()
+geom_density_ridges() +
+labs(x = "Weight (grams)",
+     y = "Species of Animal")
 ```
-
+Reflection: I originally did not specify labels for my axes, and therefore they were labelled as the variable names. However, it's important that the viewer of this plot understands what's going on at a glance, and therefore it's important to add units and specify what 'species' exactly indicates.
 
 # Spicy: Exploring Color Themes
 
@@ -151,10 +155,10 @@ use (e.g. `scale_color_aaas()`).
 ggplot(data = surveys,
        mapping = aes(x = species,
                      y = weight)) +
-geom_boxplot(outliers = FALSE) +
 geom_jitter(mapping = aes(color = genus), 
             'alpha' = 0.3
             ) +
+geom_boxplot(outliers = FALSE) +
 labs(x = "Species",
      y = "Weight (g)"
 ) +
@@ -199,10 +203,10 @@ can tell that these boxplots are associated with their respective genus.
 ggplot(data = surveys,
        mapping = aes(y = species,
                      x = weight)) +
-geom_boxplot(outliers = FALSE) +
 geom_jitter(mapping = aes(color = genus), 
             'alpha' = 0.3
             ) +
+geom_boxplot(outliers = FALSE) +
 labs(y = "Weight (g)",
      x = "Species"
 ) +
@@ -219,8 +223,15 @@ annotate("text", y = 14, x = 250, size = 3, label = "Onychomys") +
 annotate("text", y = 4, x = 250, size = 3, label = "Perognathus") +
 annotate("text", y = 3, x = 250, size = 3, label = "Peromyscus") +
 annotate("text", y = 9, x = 250, size = 3, label = "Reithrodontomys") +
-annotate("text", y = 6, x = 250, size = 3, label = "Sigmodon")
+annotate("text", y = 6, x = 250, size = 3, label = "Sigmodon") + 
+annotate("text", y = 5, x = 250, size = 3, label = "Reithrodontomys") +
+annotate("text", y = 12, x = 250, size = 3, label = "Chaetodipus") +
+annotate("text", y = 11, x = 250, size = 3, label = "Dipodomys") +
+annotate("text", y = 10, x = 250, size = 3, label = "Dipodomys") +
+annotate("text", y = 7, x = 250, size = 3, label = "Perognathus") +
+annotate("text", y = 8, x = 250, size = 3, label = "Peromyscus")
 ```
+Reflection: Initially, I only labelled each genus once in the boxplot. However, to make it abundantly clear to the user which genus each species represents, it's good to label each boxplot. Therefore, I added remaining labels.
 
 # Challenge 2 Submission
 
