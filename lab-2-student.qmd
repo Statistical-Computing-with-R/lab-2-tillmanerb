@@ -111,8 +111,9 @@ represent:
 ```{r}
 #| label: load-data
 
-surveys <- read_csv('data/surveys.csv')
+surveys <- read_csv(here::here('data','surveys.csv'))
 ```
+Reflection: I originally specified the relative filepath without the here package. To be consistent with the practices in the class, I read the data in using the here package.
 
 **2. What are the dimensions (# of rows and columns) of these data?**
 
@@ -120,10 +121,10 @@ surveys <- read_csv('data/surveys.csv')
 cat('Number of rows: ', nrow(surveys))
 #https://www.r-bloggers.com/2020/06/determine-the-size-of-a-data-frame/,
 #https://stackoverflow.com/questions/15589601/print-string-and-variable-contents-on-the-same-line-in-r
-cat('\nNumber of columns: ', nrow(surveys))
+cat('\nNumber of columns: ', ncol(surveys))
 
 ```
-
+Reflection: I wrote nrows twice whereas one should have been ncols. This is because I found copy-pasted a previous line of code, failing to double check that I had altered it to get the number of columns. In the future, I should take more caution when copy-pasting lines of code.
 
 **3. What are the data types of the variables in this dataset?**
 
@@ -205,7 +206,7 @@ geom_boxplot(outliers = FALSE) +
 geom_jitter(color = 'steelblue', 
             'alpha' = 0.3
             ) +
-labs(x = "Species",
+labs(x = "Species of Animal",
      y = "Weight (g)"
 ) +
 #https://stackoverflow.com/questions/1330989/rotating-and-spacing-axis-labels-in-ggplot2
@@ -259,16 +260,19 @@ Some people (and journals) prefer for boxplots to be stacked with a specific ori
 ggplot(data = surveys,
        mapping = aes(y = species,
                      x = weight)) +
-geom_boxplot(outliers = FALSE) +
 geom_jitter(color = 'steelblue', 
             'alpha' = 0.3
             ) +
-labs(x = "Species",
-     y = "Weight (g)"
+geom_boxplot(outliers = FALSE) +
+labs(subtitle = "Species of Animal",
+     x = "Weight (g)",
+     y = ""
 ) +
 #https://stackoverflow.com/questions/1330989/rotating-and-spacing-axis-labels-in-ggplot2
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+Reflection: When flipping my boxplot, I did not double check my axes labels. This is a similar issue to above because I copy-pasted my code from earlier without thoroughly vetting it. I should exercise more caution here. I relabeled the axes and added units, which I was previously missing but which are necessary for the viewer of the plot to better understand the data. Furthermore, I put my boxplot over the geom_jitter as it was previously being obscured by the jitter data.
+
 
 Notice how vertically stacked boxplots make the species labels more readable
 than horizontally stacked boxplots (even when the axis labels are rotated). 
